@@ -20,17 +20,16 @@ def digitalizar_muestras(muestras_disc):
 
 def escribir_codificacion(muestras_dig):
     with open(ARCHIVO_SALIDA, 'w') as txt_file:
-        txt_file.write(muestras_dig)
+        txt_file.write(repr(muestras_dig))
 
 
 # en caso de no pasar nombre como parametro se toma nombre default 'entrada.wav'
 if len(sys.argv) < 2:
-    nombre_wav = " entrada.wav"
+    nombre_wav = 'entrada.wav'
 else:
     nombre_wav = sys.argv[1]
 
-wav = leer_wav(nombre_wav)
-muestreo = muestrear_wav(wav)
+muestreo = obtener_muestras_wav(nombre_wav)
 muestreo_discretizado = discretizar_muestras(muestreo)
 muestreo_digitalizado = digitalizar_muestras(muestreo_discretizado)
 escribir_codificacion(muestreo_digitalizado)
