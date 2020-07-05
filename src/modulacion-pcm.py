@@ -6,11 +6,10 @@ import wave
 ARCHIVO_SALIDA = 'codificación-enviada.txt'
 
 def obtener_muestras_wav(nombre_wav):
-    archivo_entrada = wave.open(nombre_wav, 'r')
-    frames = archivo_entrada.getnframes()
-    data = archivo_entrada.readframes(frames)
-    data = struct.unpack('{n}h'.format(n=frames), data)
-    archivo_entrada.close()
+    with wave.open(nombre_wav, 'r') as wav_entrada:
+        frames = wav_entrada.getnframes()
+        data = wav_entrada.readframes(frames)
+        data = struct.unpack('{n}h'.format(n=frames), data)
     return data
 
 def discretizar_muestras(muestras_wav):
@@ -24,13 +23,13 @@ def escribir_codificacion(muestras_dig):
         txt_file.write(muestras_dig)
 
 
-# en caso de no pasar nombre como parametro se toma nombre default 'ejemplo.wav'
+# en caso de no pasar nombre como parametro se toma nombre default 'entrada.wav'
 if len(sys.argv) < 2:
-    nombre_archivo = " ejemplo.wav"
+    nombre_wav = " entrada.wav"
 else:
-    nombreArchivo = sys.argv[1]
+    nombre_wav = sys.argv[1]
 
-wav = leer_wav(nombre_archivo)
+wav = leer_wav(nombre_wav)
 muestreo = muestrear_wav(wav)
 muestreo_discretizado = discretizar_muestras(muestreo)
 muestreo_digitalizado = digitalizar_muestras(muestreo_discretizado)
