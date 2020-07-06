@@ -5,14 +5,12 @@ import wave
 
 from os.path import dirname, join, abspath
 
-PATH_WAV = join(dirname(dirname(abspath(__file__))), "wav")
+PATH_WAV = join(dirname(dirname(abspath(__file__))), "wav", "input")
 PATH_TXT = join(dirname(dirname(abspath(__file__))), "txt")
 ARCHIVO_SALIDA = 'codificación-enviada.txt'
 
-#print(f"PATH_WAV: {PATH_WAV}")
-
 def obtener_muestras_wav(nombre_wav):
-    with wave.open(join(PATH_WAV,nombre_wav), 'r') as wav_entrada:
+    with wave.open(join(PATH_WAV, nombre_wav), 'r') as wav_entrada:
         frames = wav_entrada.getnframes()
         data = wav_entrada.readframes(frames)
         data = struct.unpack('{n}h'.format(n=frames), data)
@@ -35,6 +33,8 @@ if len(sys.argv) < 2:
 else:
     nombre_wav = sys.argv[1]
 
+
+# Ejecuta Modulación
 muestreo = obtener_muestras_wav(nombre_wav)
 muestreo_discretizado = discretizar_muestras(muestreo)
 muestreo_digitalizado = digitalizar_muestras(muestreo_discretizado)
