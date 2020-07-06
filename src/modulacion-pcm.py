@@ -29,7 +29,9 @@ def escribir_codificacion(muestras_dig):
 
 # en caso de no pasar nombre como parametro se toma nombre default 'entrada.wav'
 if len(sys.argv) < 2:
-    nombre_wav = 'entrada.wav'
+    print("Debe escribir nombre de wav utilizado como input como argumento")
+    print("ej: python src/demodulacion-pcm.py shower_2.wav")
+    exit(1);
 else:
     nombre_wav = sys.argv[1]
 
