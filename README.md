@@ -21,4 +21,6 @@ Ambos archivos quedan ubicados en la carpeta 'txt'
 
 Se debe otorgar como parámetro el nombre del wav utilizado en el proceso de modulación. Lee el archivo 'codificación-recibida.txt' generado con la ejecución previa del script 'simulacion-ruido.py'.
 
-- Ejemplo: python src/demodulacion-pcm.py shower_2.wav
+Se puede otorgar como segundo parametro el nombre que tendrá el wav de salida. Los wav de salida serán ubicados en la carpeta wav/output.
+
+- Ejemplo: python src/demodulacion-pcm.py shower_2.wav salida.wav
