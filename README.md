@@ -11,6 +11,8 @@ Se debe otorgar como parámetro el wav a utilizar en caso de no otorgar parámet
 
 Nota: Los wav utilizados como entrada deben tener el formato de los wav de ejemplo en la carpeta wav/input (codec PCM), en caso contrario la libreria wave de python no podra ejecutarse correctamente, o también podría ocurrir algún error al manipular los bytes del wav otorgado al tener este una codificación distinta.
 
+Nota 2: Los wav utilizados deben ser con un channel, o sea monos. La simulación no funcionará con stereo.
+
 ### Ejecutar arhivo de simulación de ruido
 
 Lee archivo 'codificación-enviada.txt' generado cpn la ejecución previa del script 'modulacion-pcm.py'. Escribe salida en archivo 'codificación-recibida.txt'.
