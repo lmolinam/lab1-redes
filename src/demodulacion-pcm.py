@@ -1,7 +1,10 @@
 import struct
 import sys
 import wave
+import matplotlib.pyplot as plt
 
+
+from collections import namedtuple
 from os.path import dirname, join, abspath
 
 PATH_WAV_OUT = join(dirname(dirname(abspath(__file__))), "wav", "output")
@@ -34,13 +37,13 @@ def reconstruir_muestras(muestras_dig):
 
     return muestras_rec
 
-def crear_wav(nombre_wav, muestras_reconstruidas, metadata_orig_wav):
-    nframes = metadata_orig_wav.nframes
-    framerate = metadata_orig_wav.framerate
-    comptype = metadata_orig_wav.comptype
-    compname = metadata_orig_wav.compname
-    nchannels = metadata_orig_wav.nchannels
-    sampwidth = metadata_orig_wav.sampwidth
+def crear_wav(nombre_wav, muestras_reconstruidas, metadata_wav):
+    nframes = metadata_wav.nframes
+    framerate = metadata_wav.framerate
+    comptype = metadata_wav.comptype
+    compname = metadata_wav.compname
+    nchannels = metadata_wav.nchannels
+    sampwidth = metadata_wav.sampwidth
     
     with wave.open(join(PATH_WAV_OUT, nombre_wav), 'w') as wav_salida: 
         wav_salida.setparams((nchannels, sampwidth, int(framerate), nframes, comptype, compname))
@@ -50,13 +53,29 @@ def crear_wav(nombre_wav, muestras_reconstruidas, metadata_orig_wav):
             wav_salida.writeframes(struct.pack('h', muestra))
 
 
+def plotear_wav(nombre_wav):
+    with wave.open(join(PATH_WAV_OUT, nombre_wav), 'r') as wav_entrada:
+        frames = wav_entrada.getnframes()
+        data = wav_entrada.readframes(frames)
+        data = struct.unpack('{n}h'.format(n=frames), data)
+    
+    muestras_discretizadas = [int(muestra) for muestra in data]
+    plt.plot(muestras_discretizadas, label='Muestras discretizadas wav generado')
+    plt.title('Señal wav generado')
+    plt.legend()
+    #plt.savefig("señal_recibida.png")
+    plt.show()
+
 # en caso de no pasar nombre como parametro se toma nombre default 'salida.wav'
 if len(sys.argv) < 2:
-    print("Debe escribir nombre de wav utilizado como input como argumento")
-    print("ej: python src/demodulacion-pcm.py shower_2.wav")
-    exit(1);
+    print("Tomando valores default para metadata de wav a crear")
+    MetadataWav = namedtuple("MetadataWav", "framerate nframes comptype compname nchannels sampwidth")
+    # nframes applause.wav = 400976
+    metadata_wav = MetadataWav(48000, 0, "NONE", "not compressed", 1, 2)
 else:
+    print("Tomando valores de wav original para metadata de wav")
     nombre_wav_original = sys.argv[1]
+    metadata_wav = obtener_metadata_wav_original(nombre_wav_original)
 
 if len(sys.argv) < 3:
     nombre_wav_salida = " salida.wav"
@@ -66,5 +85,11 @@ else:
 # Ejecuta Demodulación
 muestras_digitales = leer_codificacion_recibida()
 muestras_reconstruidas = reconstruir_muestras(muestras_digitales)
-metadata_wav_original = obtener_metadata_wav_original(nombre_wav_original)
-crear_wav(nombre_wav_salida, muestras_reconstruidas, metadata_wav_original)
+print(metadata_wav)
+crear_wav(nombre_wav_salida, muestras_reconstruidas, metadata_wav)
+#plotear_wav(nombre_wav_salida)
+
+
+
+
+
