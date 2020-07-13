@@ -23,8 +23,14 @@ Ambos archivos quedan ubicados en la carpeta 'txt'
 
 ### Ejecutar archivo de demodulación
 
-Se debe otorgar como parámetro el nombre del wav utilizado en el proceso de modulación. Lee el archivo 'codificación-recibida.txt' generado con la ejecución previa del script 'simulacion-ruido.py'.
+Se puede otorgar como parámetro el nombre del wav utilizado en el proceso de modulación. Lee el archivo 'codificación-recibida.txt' generado con la ejecución previa del script 'simulacion-ruido.py'.
 
 Se puede otorgar como segundo parametro el nombre que tendrá el wav de salida. Los wav de salida serán ubicados en la carpeta wav/output.
 
 - Ejemplo: python src/demodulacion-pcm.py shower_2.wav salida.wav
+
+En caso de no otorgar parámetros se toman ciertos valores default en cuanto a metadata del wav a generar, estos valores estan definidos en la línea 74 del script:
+
+`metadata_wav = MetadataWav(48000, 0, "NONE", "not compressed", 1, 2)`
+
+Lo importante a destacar es el primer parámetro, el cual correspode a la tasa de muestreo.
